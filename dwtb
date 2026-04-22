@@ -1,17 +1,11 @@
-local Script;
-for i,v in next, getgc() do
-    if type(v) == "function" then
-        if islclosure(v) and not iscclosure(v) then
-            if tostring(getfenv(v).script) == "LocalScript" then
-                Script = getfenv(v)
-            end
-        end
-    end
-end
-local OldIndex;
-OldIndex = hookmetamethod(game, "__index", newcclosure(function(Self, Method, ...)    
-    if getfenv(debug.info(2, "f")) == Script then
-        return wait(9e9)
-    end
-    return OldIndex(Self, Method, ...)
+local OldFindService;
+OldFindService = hookfunction(game.FindService, newcclosure(function(...)
+    print(...)
+end))
+
+local OldFireServer;
+OldFireServer = hookfunction(Instance.new("RemoteEvent").FireServer, newcclosure(function(...)
+    local Args = {...}
+    print(unpack(Args))
+    return
 end))
